@@ -28,9 +28,7 @@ echo "Latest commit:"
 git log -1 --oneline
 
 #source update.sh
-#Pull most recent main branch 
-git reset --hard origin/main
-git pull origin main
+
 #############################
 # Install npm dependencies
 npm install
@@ -41,4 +39,7 @@ echo $SERVER > server.crt
 
 # Start (or restart) the application with pm2
 #pm2 start ./bin/www --name GroupThirteen
+#Pull most recent main branch 
+git reset --hard origin/main
+git pull origin main
 node app.js
