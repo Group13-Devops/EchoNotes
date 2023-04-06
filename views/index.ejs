@@ -21,8 +21,9 @@
 </head>
 <body>
     <%- include('./partials/navbar.ejs') %>
-    <div class="container ">
-    <h1 style="margin:auto">ECHO : Notes (<%= notes.length %>)</h1>
+    <div class="container " style="margin:auto">
+    <h1>ECHO : Notes (<%= notes.length %>)</h1>
+    <hr>
     
 
     <% notes.forEach(note => { %>
