@@ -1,0 +1,55 @@
+version: 2.1
+
+git:
+  depth: false
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+      - hold_for_approval:
+          type: approval
+          requires:
+            - build
+      - deploy:
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - hold_for_approval
+
+jobs:
+  build:
+    working_directory: ~/GroupThirteen
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run:
+          name: update-npm
+          command: 'sudo npm install -g npm@8.1.4'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: install-npm
+          command: npm install       
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: audit-packages
+          command: npm audit
+  deploy:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - run:
+         name: deploy-application
+         command: ssh -o StrictHostKeyChecking=no $EC2_13@$EC2_PUBLIC_DNS "export SERVER1=\"$SERVER\"; export PRIVATE_KEY1=\"$PRIVATE_KEY\"; rm -rf NotesAppGroup13/;git clone https://github.com/Group13-Devops/NotesAppGroup13.git; source NotesAppGroup13/deploy.sh"
