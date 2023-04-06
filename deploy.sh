@@ -21,7 +21,8 @@ rm -rf NotesAppGroup13/
 git clone https://github.com/Group13-Devops/NotesAppGroup13.git
 
 #Pull most recent main branch 
-#git pull origin main
+git reset --hard origin/main
+git pull origin main
 
 # Change to the repository folder
 cd NotesAppGroup13/
